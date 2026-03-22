@@ -1,12 +1,13 @@
 /**
  * App - Componente raíz con enrutamiento
- * Define todas las rutas de la aplicación.
+ * Layout compartido en sub-páginas, Index con layout propio.
  */
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import Layout from "@/components/Layout";
 
 // Páginas
 import Index from "./pages/Index";
@@ -27,13 +28,17 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Home tiene su propio layout completo */}
           <Route path="/" element={<Index />} />
-          <Route path="/servicios/manicura" element={<ManicuraPage />} />
-          <Route path="/servicios/pedicura" element={<PedicuraPage />} />
-          <Route path="/servicios/unas-de-gel" element={<UnasDeGelPage />} />
-          <Route path="/disenos" element={<DiseniosPage />} />
-          <Route path="/sobre-nosotros" element={<SobreNosotrosPage />} />
-          <Route path="/contacto" element={<ContactoPage />} />
+
+          {/* Sub-páginas con Layout compartido (Navbar + Footer + ChatBot) */}
+          <Route path="/servicios/manicura" element={<Layout><ManicuraPage /></Layout>} />
+          <Route path="/servicios/pedicura" element={<Layout><PedicuraPage /></Layout>} />
+          <Route path="/servicios/unas-de-gel" element={<Layout><UnasDeGelPage /></Layout>} />
+          <Route path="/disenos" element={<Layout><DiseniosPage /></Layout>} />
+          <Route path="/sobre-nosotros" element={<Layout><SobreNosotrosPage /></Layout>} />
+          <Route path="/contacto" element={<Layout><ContactoPage /></Layout>} />
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
