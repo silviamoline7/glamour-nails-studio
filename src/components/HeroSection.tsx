@@ -1,4 +1,10 @@
+/**
+ * HeroSection - Sección principal de la página de inicio
+ * Incluye H1 con keyword SEO "Salón de Uñas en Madrid",
+ * imagen de fondo con overlay, y CTAs principales.
+ */
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-salon.jpg";
 
 const HeroSection = () => {
@@ -9,9 +15,13 @@ const HeroSection = () => {
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background image */}
+      {/* Imagen de fondo con overlay oscuro para legibilidad */}
       <div className="absolute inset-0">
-        <img src={heroImage} alt="Lumière Nails Studio - Salón de uñas de lujo" className="w-full h-full object-cover" />
+        <img
+          src={heroImage}
+          alt="Lumière Nails - Salón de uñas de lujo en Madrid"
+          className="w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-background/30" />
       </div>
 
@@ -26,17 +36,16 @@ const HeroSection = () => {
             Nail Studio & Spa
           </motion.p>
 
+          {/* H1 con keyword SEO principal */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: [0.2, 0, 0, 1] }}
             className="font-display text-5xl md:text-7xl font-semibold text-foreground leading-[1.1] text-balance mb-8"
           >
-            El arte de la
+            Salón de Uñas
             <br />
-            <span className="italic gold-text">elegancia</span>
-            <br />
-            en tus manos
+            en <span className="italic gold-text">Madrid</span>
           </motion.h1>
 
           <motion.p
@@ -60,17 +69,17 @@ const HeroSection = () => {
             >
               Reservar Cita
             </button>
-            <button
-              onClick={() => scrollTo("#servicios")}
+            <Link
+              to="/disenos"
               className="px-8 py-4 rounded-full font-body text-xl text-foreground border border-gold/30 hover:border-gold hover:bg-accent transition-all duration-300"
             >
-              Ver Servicios
-            </button>
+              Ver Diseños
+            </Link>
           </motion.div>
         </div>
       </div>
 
-      {/* Decorative gold line */}
+      {/* Línea decorativa dorada */}
       <motion.div
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
