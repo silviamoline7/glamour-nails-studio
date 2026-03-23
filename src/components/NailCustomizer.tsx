@@ -1,73 +1,85 @@
+/**
+ * NailCustomizer - Personalizador interactivo de uñas
+ * Permite elegir colores y decoraciones para cada dedo.
+ * Visualización en tiempo real sobre una mano SVG.
+ */
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Circle, Diamond, Star, Heart, Minus, X } from "lucide-react";
 
-const NAIL_COLORS = [
-  { name: "Rojo Clásico", value: "#C0392B" },
-  { name: "Rosa Pastel", value: "#F5B7B1" },
-  { name: "Rosa Fucsia", value: "#E91E8C" },
-  { name: "Nude", value: "#E8C9B0" },
-  { name: "Coral", value: "#FF7F7F" },
-  { name: "Borgoña", value: "#7B2D3B" },
-  { name: "Morado", value: "#8E44AD" },
-  { name: "Lavanda", value: "#D2B4DE" },
-  { name: "Azul Marino", value: "#2C3E6B" },
-  { name: "Azul Cielo", value: "#85C1E9" },
-  { name: "Verde Esmeralda", value: "#1ABC9C" },
-  { name: "Blanco Francés", value: "#FDFEFE" },
-  { name: "Negro Elegante", value: "#1C1C1C" },
-  { name: "Dorado", value: "#D4AC0D" },
-  { name: "Plateado", value: "#BDC3C7" },
-  { name: "Transparente", value: "#F8E8E0" },
+/** Paleta de colores disponibles para las uñas */
+const COLORES_UNAS = [
+  { nombre: "Rojo Clásico", valor: "#C0392B" },
+  { nombre: "Rosa Pastel", valor: "#F5B7B1" },
+  { nombre: "Rosa Fucsia", valor: "#E91E8C" },
+  { nombre: "Nude", valor: "#E8C9B0" },
+  { nombre: "Coral", valor: "#FF7F7F" },
+  { nombre: "Borgoña", valor: "#7B2D3B" },
+  { nombre: "Morado", valor: "#8E44AD" },
+  { nombre: "Lavanda", valor: "#D2B4DE" },
+  { nombre: "Azul Marino", valor: "#2C3E6B" },
+  { nombre: "Azul Cielo", valor: "#85C1E9" },
+  { nombre: "Verde Esmeralda", valor: "#1ABC9C" },
+  { nombre: "Blanco Francés", valor: "#FDFEFE" },
+  { nombre: "Negro Elegante", valor: "#1C1C1C" },
+  { nombre: "Dorado", valor: "#D4AC0D" },
+  { nombre: "Plateado", valor: "#BDC3C7" },
+  { nombre: "Transparente", valor: "#F8E8E0" },
 ];
 
-const DECORATIONS = [
-  { id: "sparkle", name: "Brillos", icon: Sparkles, emoji: "✨" },
-  { id: "pearl", name: "Perlas", icon: Circle, emoji: "⚪" },
-  { id: "diamond", name: "Diamantes", icon: Diamond, emoji: "💎" },
-  { id: "star", name: "Estrellas", icon: Star, emoji: "⭐" },
-  { id: "heart", name: "Corazones", icon: Heart, emoji: "💕" },
-  { id: "line", name: "Líneas", icon: Minus, emoji: "〰️" },
+/** Decoraciones disponibles para aplicar sobre cada uña */
+const DECORACIONES = [
+  { id: "brillo", nombre: "Brillos", icono: Sparkles, emoji: "✨" },
+  { id: "perla", nombre: "Perlas", icono: Circle, emoji: "⚪" },
+  { id: "diamante", nombre: "Diamantes", icono: Diamond, emoji: "💎" },
+  { id: "estrella", nombre: "Estrellas", icono: Star, emoji: "⭐" },
+  { id: "corazon", nombre: "Corazones", icono: Heart, emoji: "💕" },
+  { id: "linea", nombre: "Líneas", icono: Minus, emoji: "〰️" },
 ];
 
-interface NailState {
+/** Estado de cada uña: color y decoraciones aplicadas */
+interface EstadoUna {
   color: string;
-  decorations: string[];
+  decoraciones: string[];
 }
 
-const defaultNail: NailState = { color: "#F5B7B1", decorations: [] };
+const unaInicial: EstadoUna = { color: "#F5B7B1", decoraciones: [] };
 
 const NailCustomizer = () => {
-  const [nails, setNails] = useState<NailState[]>(
-    Array(5).fill(null).map(() => ({ ...defaultNail, decorations: [] }))
+  const [unas, setUnas] = useState<EstadoUna[]>(
+    Array(5).fill(null).map(() => ({ ...unaInicial, decoraciones: [] }))
   );
-  const [selectedNail, setSelectedNail] = useState<number>(0);
-  const [activeTab, setActiveTab] = useState<"color" | "decoration">("color");
+  const [unaSeleccionada, setUnaSeleccionada] = useState<number>(0);
+  const [pestanaActiva, setPestanaActiva] = useState<"color" | "decoracion">("color");
 
-  const fingerNames = ["Pulgar", "Índice", "Medio", "Anular", "Meñique"];
+  /** Nombres de los dedos de la mano */
+  const nombresDedos = ["Pulgar", "Índice", "Medio", "Anular", "Meñique"];
 
-  const updateNailColor = (color: string) => {
-    setNails((prev) => prev.map((n, i) => (i === selectedNail ? { ...n, color } : n)));
+  /** Cambiar el color de la uña seleccionada */
+  const cambiarColor = (color: string) => {
+    setUnas((prev) => prev.map((una, i) => (i === unaSeleccionada ? { ...una, color } : una)));
   };
 
-  const toggleDecoration = (decoId: string) => {
-    setNails((prev) =>
-      prev.map((n, i) =>
-        i === selectedNail
+  /** Activar/desactivar una decoración en la uña seleccionada */
+  const alternarDecoracion = (idDecoracion: string) => {
+    setUnas((prev) =>
+      prev.map((una, i) =>
+        i === unaSeleccionada
           ? {
-              ...n,
-              decorations: n.decorations.includes(decoId)
-                ? n.decorations.filter((d) => d !== decoId)
-                : [...n.decorations, decoId],
+              ...una,
+              decoraciones: una.decoraciones.includes(idDecoracion)
+                ? una.decoraciones.filter((d) => d !== idDecoracion)
+                : [...una.decoraciones, idDecoracion],
             }
-          : n
+          : una
       )
     );
   };
 
-  const applyToAll = () => {
-    const current = nails[selectedNail];
-    setNails(Array(5).fill(null).map(() => ({ ...current, decorations: [...current.decorations] })));
+  /** Aplicar el diseño de la uña seleccionada a todas las demás */
+  const aplicarATodas = () => {
+    const actual = unas[unaSeleccionada];
+    setUnas(Array(5).fill(null).map(() => ({ ...actual, decoraciones: [...actual.decoraciones] })));
   };
 
   return (
@@ -81,63 +93,62 @@ const NailCustomizer = () => {
         </p>
       </div>
 
-      {/* Hand visualization */}
+      {/* ── Visualización de la mano (SVG) ── */}
       <div className="flex justify-center py-4">
         <div className="relative">
-          {/* Hand shape - SVG simplified hand */}
           <svg viewBox="0 0 320 280" className="w-72 h-auto">
-            {/* Palm */}
+            {/* Palma de la mano */}
             <ellipse cx="160" cy="200" rx="90" ry="70" fill="hsl(30, 40%, 82%)" />
-            {/* Wrist */}
+            {/* Muñeca */}
             <rect x="100" y="230" width="120" height="50" rx="20" fill="hsl(30, 40%, 82%)" />
-            
-            {/* Fingers - positioned as a spread hand */}
+
+            {/* Dedos con uñas editables */}
             {[
-              { x: 55, y: 140, rotate: -20, height: 80, width: 32 },   // Thumb
-              { x: 100, y: 60, rotate: -8, height: 100, width: 28 },   // Index
-              { x: 148, y: 40, rotate: 0, height: 110, width: 28 },    // Middle
-              { x: 196, y: 55, rotate: 8, height: 100, width: 28 },    // Ring
-              { x: 238, y: 80, rotate: 16, height: 80, width: 24 },    // Pinky
-            ].map((finger, i) => (
-              <g key={i} transform={`rotate(${finger.rotate}, ${finger.x + finger.width / 2}, ${finger.y + finger.height})`}>
-                {/* Finger body */}
+              { x: 55, y: 140, rotacion: -20, alto: 80, ancho: 32 },   // Pulgar
+              { x: 100, y: 60, rotacion: -8, alto: 100, ancho: 28 },   // Índice
+              { x: 148, y: 40, rotacion: 0, alto: 110, ancho: 28 },    // Medio
+              { x: 196, y: 55, rotacion: 8, alto: 100, ancho: 28 },    // Anular
+              { x: 238, y: 80, rotacion: 16, alto: 80, ancho: 24 },    // Meñique
+            ].map((dedo, i) => (
+              <g key={i} transform={`rotate(${dedo.rotacion}, ${dedo.x + dedo.ancho / 2}, ${dedo.y + dedo.alto})`}>
+                {/* Cuerpo del dedo */}
                 <rect
-                  x={finger.x}
-                  y={finger.y}
-                  width={finger.width}
-                  height={finger.height}
-                  rx={finger.width / 2}
+                  x={dedo.x}
+                  y={dedo.y}
+                  width={dedo.ancho}
+                  height={dedo.alto}
+                  rx={dedo.ancho / 2}
                   fill="hsl(30, 40%, 82%)"
-                  stroke={selectedNail === i ? "hsl(38, 65%, 50%)" : "hsl(30, 30%, 75%)"}
-                  strokeWidth={selectedNail === i ? 2.5 : 1}
+                  stroke={unaSeleccionada === i ? "hsl(38, 65%, 50%)" : "hsl(30, 30%, 75%)"}
+                  strokeWidth={unaSeleccionada === i ? 2.5 : 1}
                 />
-                {/* Nail */}
+                {/* Uña */}
                 <rect
-                  x={finger.x + 3}
-                  y={finger.y + 2}
-                  width={finger.width - 6}
-                  height={finger.width * 0.9}
-                  rx={finger.width / 3}
-                  fill={nails[i].color}
-                  stroke={selectedNail === i ? "hsl(38, 65%, 50%)" : "rgba(0,0,0,0.1)"}
-                  strokeWidth={selectedNail === i ? 2 : 1}
+                  x={dedo.x + 3}
+                  y={dedo.y + 2}
+                  width={dedo.ancho - 6}
+                  height={dedo.ancho * 0.9}
+                  rx={dedo.ancho / 3}
+                  fill={unas[i].color}
+                  stroke={unaSeleccionada === i ? "hsl(38, 65%, 50%)" : "rgba(0,0,0,0.1)"}
+                  strokeWidth={unaSeleccionada === i ? 2 : 1}
                   className="cursor-pointer transition-all duration-200"
-                  onClick={() => setSelectedNail(i)}
-                  style={{ filter: nails[i].color === "#FDFEFE" ? "none" : "brightness(1.05) saturate(1.1)" }}
+                  onClick={() => setUnaSeleccionada(i)}
+                  style={{ filter: unas[i].color === "#FDFEFE" ? "none" : "brightness(1.05) saturate(1.1)" }}
                 />
-                {/* Decorations on nail */}
-                {nails[i].decorations.length > 0 && (
+                {/* Decoraciones sobre la uña */}
+                {unas[i].decoraciones.length > 0 && (
                   <text
-                    x={finger.x + finger.width / 2}
-                    y={finger.y + finger.width * 0.55}
+                    x={dedo.x + dedo.ancho / 2}
+                    y={dedo.y + dedo.ancho * 0.55}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fontSize={finger.width * 0.3}
+                    fontSize={dedo.ancho * 0.3}
                     className="pointer-events-none select-none"
                   >
-                    {nails[i].decorations
+                    {unas[i].decoraciones
                       .slice(0, 2)
-                      .map((d) => DECORATIONS.find((dec) => dec.id === d)?.emoji || "")
+                      .map((d) => DECORACIONES.find((dec) => dec.id === d)?.emoji || "")
                       .join("")}
                   </text>
                 )}
@@ -147,85 +158,83 @@ const NailCustomizer = () => {
         </div>
       </div>
 
-      {/* Selected nail label */}
+      {/* ── Indicador de uña seleccionada ── */}
       <div className="text-center">
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent font-body text-sm text-foreground">
-          Editando: <strong>{fingerNames[selectedNail]}</strong>
+          Editando: <strong>{nombresDedos[unaSeleccionada]}</strong>
         </span>
         <button
-          onClick={applyToAll}
+          onClick={aplicarATodas}
           className="ml-3 px-3 py-1.5 rounded-full border border-border font-body text-sm text-muted-foreground hover:bg-accent transition-all"
         >
           Aplicar a todas
         </button>
       </div>
 
-      {/* Tabs */}
+      {/* ── Pestañas: Colores / Decoraciones ── */}
       <div className="flex gap-2 justify-center">
-        {(["color", "decoration"] as const).map((tab) => (
+        {(["color", "decoracion"] as const).map((pestana) => (
           <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
+            key={pestana}
+            onClick={() => setPestanaActiva(pestana)}
             className={`px-5 py-2 rounded-full font-body text-base transition-all duration-300 ${
-              activeTab === tab
+              pestanaActiva === pestana
                 ? "gold-gradient text-primary-foreground"
                 : "border border-border text-muted-foreground hover:bg-accent"
             }`}
           >
-            {tab === "color" ? "🎨 Colores" : "✨ Decoraciones"}
+            {pestana === "color" ? "🎨 Colores" : "✨ Decoraciones"}
           </button>
         ))}
       </div>
 
-      {/* Color / Decoration panels */}
+      {/* ── Panel de colores / decoraciones ── */}
       <AnimatePresence mode="wait">
-        {activeTab === "color" ? (
+        {pestanaActiva === "color" ? (
           <motion.div
-            key="colors"
+            key="colores"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="grid grid-cols-8 gap-2"
           >
-            {NAIL_COLORS.map((c) => (
+            {COLORES_UNAS.map((c) => (
               <button
-                key={c.value}
-                onClick={() => updateNailColor(c.value)}
-                title={c.name}
+                key={c.valor}
+                onClick={() => cambiarColor(c.valor)}
+                title={c.nombre}
                 className={`w-full aspect-square rounded-xl border-2 transition-all duration-200 hover:scale-110 ${
-                  nails[selectedNail].color === c.value
+                  unas[unaSeleccionada].color === c.valor
                     ? "border-gold scale-110 shadow-elevated"
                     : "border-border"
                 }`}
-                style={{ backgroundColor: c.value }}
+                style={{ backgroundColor: c.valor }}
               />
             ))}
           </motion.div>
         ) : (
           <motion.div
-            key="decorations"
+            key="decoraciones"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="grid grid-cols-3 gap-3"
           >
-            {DECORATIONS.map((deco) => {
-              const isActive = nails[selectedNail].decorations.includes(deco.id);
+            {DECORACIONES.map((deco) => {
+              const estaActiva = unas[unaSeleccionada].decoraciones.includes(deco.id);
               return (
                 <button
                   key={deco.id}
-                  onClick={() => toggleDecoration(deco.id)}
+                  onClick={() => alternarDecoracion(deco.id)}
                   className={`p-3 rounded-xl border-2 flex flex-col items-center gap-1.5 font-body text-sm transition-all duration-200 ${
-                    isActive
+                    estaActiva
                       ? "border-gold bg-gold/5 text-foreground"
                       : "border-border text-muted-foreground hover:border-gold/30 hover:bg-accent"
                   }`}
                 >
                   <span className="text-xl">{deco.emoji}</span>
-                  <span>{deco.name}</span>
-                  {isActive && (
-                    <X className="w-3 h-3 text-gold" />
-                  )}
+                  <span>{deco.nombre}</span>
+                  {estaActiva && <X className="w-3 h-3 text-gold" />}
                 </button>
               );
             })}
