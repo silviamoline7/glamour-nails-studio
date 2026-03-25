@@ -1,12 +1,12 @@
 /**
  * HeroSection - Sección principal (Hero) de la página de inicio
- * Incluye H1 con keyword SEO "Salón de Uñas en Madrid",
- * imagen de fondo con overlay oscuro para legibilidad,
- * animaciones de entrada escalonadas y CTAs principales.
+ * H1 con keyword SEO, imagen de fondo con overlay,
+ * botones CTA estilizados y animaciones de entrada.
  */
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import imagenHero from "@/assets/hero-salon.jpg";
 
 const HeroSection = () => {
@@ -39,37 +39,33 @@ const HeroSection = () => {
           className="w-full h-full object-cover"
           style={{ y: desplazamientoImagen }}
         />
-        {/* Overlay degradado para legibilidad del texto */}
-        <div className="absolute inset-0 bg-gradient-to-r from-background/98 via-background/80 to-background/40 md:from-background/95 md:via-background/70 md:to-background/30" />
+        {/* Overlay más envolvente en móvil para legibilidad */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/85 to-background/60 md:bg-gradient-to-r md:from-background/95 md:via-background/70 md:to-background/20" />
       </div>
 
       {/* ── Contenido principal ── */}
-      <div className="relative container mx-auto px-6 pt-24 md:pt-32 pb-20">
+      <div className="relative container mx-auto px-6 pt-28 md:pt-32 pb-20">
         <div className="max-w-2xl">
           {/* Subtítulo decorativo */}
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-body text-base md:text-lg tracking-[0.3em] uppercase text-gold mb-4 md:mb-6"
+            className="flex items-center gap-3 mb-5 md:mb-6"
           >
-            Nail Studio & Spa
-          </motion.p>
-
-          {/* Línea decorativa dorada */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.2, 0, 0, 1] }}
-            className="w-16 h-0.5 gold-gradient origin-left mb-6 md:mb-8"
-          />
+            <div className="w-8 h-px gold-gradient" />
+            <p className="font-body text-sm md:text-lg tracking-[0.3em] uppercase text-gold">
+              Nail Studio & Spa
+            </p>
+            <div className="w-8 h-px gold-gradient" />
+          </motion.div>
 
           {/* H1 con keyword SEO principal */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: [0.2, 0, 0, 1] }}
-            className="font-display text-4xl md:text-7xl font-semibold text-foreground leading-[1.1] text-balance mb-6 md:mb-8"
+            className="font-display text-4xl md:text-7xl font-semibold text-foreground leading-[1.1] text-balance mb-5 md:mb-8"
           >
             Salón de Uñas
             <br />
@@ -81,27 +77,29 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="font-body text-lg md:text-2xl text-muted-foreground leading-relaxed max-w-lg mb-8 md:mb-10"
+            className="font-body text-base md:text-2xl text-muted-foreground leading-relaxed max-w-lg mb-8 md:mb-10"
           >
             Experimenta el lujo de un servicio personalizado con técnicas de vanguardia y productos premium.
           </motion.p>
 
-          {/* Botones CTA - apilados en móvil, horizontales en desktop */}
+          {/* Botones CTA estilizados */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4"
           >
             <button
               onClick={() => irASeccion("#reservar")}
-              className="gold-gradient px-8 py-4 rounded-full font-body text-lg md:text-xl text-primary-foreground shadow-elevated hover:scale-105 transition-transform duration-300 text-center"
+              className="group gold-gradient px-7 py-3.5 rounded-full font-body text-base md:text-xl text-primary-foreground shadow-elevated hover:scale-105 transition-transform duration-300 flex items-center justify-center gap-2"
             >
+              <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
               Reservar Cita
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
             </button>
             <Link
               to="/disenos"
-              className="px-8 py-4 rounded-full font-body text-lg md:text-xl text-foreground border border-gold/30 hover:border-gold hover:bg-accent transition-all duration-300 text-center"
+              className="px-7 py-3.5 rounded-full font-body text-base md:text-xl text-foreground border border-gold/40 hover:border-gold hover:bg-accent/50 backdrop-blur-sm transition-all duration-300 text-center"
             >
               Ver Diseños
             </Link>

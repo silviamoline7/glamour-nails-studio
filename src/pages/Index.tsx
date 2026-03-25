@@ -1,9 +1,9 @@
 /**
  * Index - Página de inicio principal
- * Incluye hero, trust bar, tratamientos, testimonios,
- * booking, FAQ, redes sociales y footer.
- * Schema markup y SEO optimizado.
+ * Maneja el scroll a #reservar cuando se navega desde otras páginas.
  */
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TrustBar from "@/components/TrustBar";
@@ -18,6 +18,19 @@ import SchemaMarkup from "@/components/SchemaMarkup";
 import SEOHead from "@/components/SEOHead";
 
 const Index = () => {
+  const ubicacion = useLocation();
+
+  /** Si llega con ?reservar=true, hacer scroll a la sección de reservar */
+  useEffect(() => {
+    const parametros = new URLSearchParams(ubicacion.search);
+    if (parametros.get("reservar") === "true") {
+      setTimeout(() => {
+        const seccion = document.querySelector("#reservar");
+        seccion?.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+    }
+  }, [ubicacion.search]);
+
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
