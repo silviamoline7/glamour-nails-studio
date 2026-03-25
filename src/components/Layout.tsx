@@ -1,6 +1,6 @@
 /**
  * Layout - Wrapper con Navbar, Footer y ChatBot
- * Usado por todas las páginas excepto Index (que tiene su propio layout).
+ * Maneja el scroll a #reservar cuando se navega desde otras páginas.
  */
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -15,7 +15,6 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   const { pathname } = useLocation();
 
-  // Scroll al top cuando cambia la ruta
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
